@@ -34,67 +34,112 @@ local QUEUE_CODE = [[
 
 repeat task.wait() until game:IsLoaded()
 
--- Quantum Style UI (Delta Compatible)
+-- CLEAN HUB UI (Everything inside box)
 
-local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "QuantumUI"
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 
+-- MAIN
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 600, 0, 350)
-main.Position = UDim2.new(0.5, -300, 0.5, -175)
-main.BackgroundColor3 = Color3.fromRGB(15,15,20)
-main.BorderSizePixel = 0
-main.Visible = false
+main.Size = UDim2.new(0, 420, 0, 240)
+main.Position = UDim2.new(0.5, -210, 0.5, -120)
+main.BackgroundColor3 = Color3.fromRGB(10,10,10)
+main.BorderSizePixel = 2
+main.BorderColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,15)
 
-local stroke = Instance.new("UIStroke", main)
-stroke.Color = Color3.fromRGB(170,0,255)
-
-local corner = Instance.new("UICorner", main)
-
--- Title
+-- TITLE (nằm TRONG box)
 local title = Instance.new("TextLabel", main)
-title.Text = "Quantum Onyx Project"
-title.Size = UDim2.new(1,0,0,30)
+title.Text = "PLS HUB SCRIPT"
+title.Size = UDim2.new(1,0,0,35)
 title.BackgroundTransparency = 1
-title.TextColor3 = Color3.fromRGB(170,0,255)
+title.TextColor3 = Color3.fromRGB(255,255,255)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 
--- Toggle Button (open UI)
-local toggleBtn = Instance.new("TextButton", gui)
-toggleBtn.Size = UDim2.new(0,100,0,30)
-toggleBtn.Position = UDim2.new(0,20,0,200)
-toggleBtn.Text = "OPEN"
-toggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-toggleBtn.TextColor3 = Color3.fromRGB(255,255,255)
+-- LEFT PANEL
+local left = Instance.new("Frame", main)
+left.Size = UDim2.new(0.45,0,1,-40)
+left.Position = UDim2.new(0,10,0,40)
+left.BackgroundTransparency = 1
 
-toggleBtn.MouseButton1Click:Connect(function()
-    main.Visible = not main.Visible
-end)
+-- RIGHT PANEL (LOAD BUTTON)
+local right = Instance.new("Frame", main)
+right.Size = UDim2.new(0.5,0,1,-40)
+right.Position = UDim2.new(0.5,0,0,40)
+right.BackgroundTransparency = 1
 
--- Example Toggle
-local autoEgg = Instance.new("TextButton", main)
-autoEgg.Position = UDim2.new(0,20,0,60)
-autoEgg.Size = UDim2.new(0,200,0,30)
-autoEgg.Text = "Auto Get Egg [OFF]"
-autoEgg.BackgroundColor3 = Color3.fromRGB(25,25,25)
-autoEgg.TextColor3 = Color3.fromRGB(120,120,120)
+-- FUNCTION CREATE
+local function createToggle(parent, text, y)
+    local box = Instance.new("Frame", parent)
+    box.Size = UDim2.new(1,0,0,40)
+    box.Position = UDim2.new(0,0,0,y)
+    box.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    Instance.new("UICorner", box)
 
-local state = false
-autoEgg.MouseButton1Click:Connect(function()
-    state = not state
-    if state then
-        autoEgg.Text = "Auto Get Egg [ON]"
-        autoEgg.TextColor3 = Color3.fromRGB(170,0,255)
-    else
-        autoEgg.Text = "Auto Get Egg [OFF]"
-        autoEgg.TextColor3 = Color3.fromRGB(120,120,120)
+    local txt = Instance.new("TextLabel", box)
+    txt.Text = text
+    txt.Size = UDim2.new(0.7,0,1,0)
+    txt.BackgroundTransparency = 1
+    txt.TextColor3 = Color3.fromRGB(0,0,0)
+    txt.Font = Enum.Font.Gotham
+    txt.TextSize = 13
+
+    local toggle = Instance.new("Frame", box)
+    toggle.Size = UDim2.new(0,40,0,20)
+    toggle.Position = UDim2.new(1,-50,0.5,-10)
+    toggle.BackgroundColor3 = Color3.fromRGB(180,180,180)
+    Instance.new("UICorner", toggle).CornerRadius = UDim.new(1,0)
+
+    local dot = Instance.new("Frame", toggle)
+    dot.Size = UDim2.new(0,18,0,18)
+    dot.Position = UDim2.new(0,1,0.5,-9)
+    dot.BackgroundColor3 = Color3.fromRGB(0,0,0)
+    Instance.new("UICorner", dot).CornerRadius = UDim.new(1,0)
+
+    local on = false
+    box.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            on = not on
+            dot:TweenPosition(
+                on and UDim2.new(1,-19,0.5,-9) or UDim2.new(0,1,0.5,-9),
+                "Out","Quad",0.2,true
+            )
+            toggle.BackgroundColor3 = on and Color3.fromRGB(0,200,0) or Color3.fromRGB(180,180,180)
+        end
+    end)
+end
+
+-- ADD TOGGLE
+createToggle(left, "AUTO GET EGG", 0)
+createToggle(left, "INFINITE EGG", 50)
+createToggle(left, "EGG XRAY", 100)
+
+-- LOAD BUTTON (ở trong khung luôn)
+local load = Instance.new("TextButton", right)
+load.Size = UDim2.new(0.8,0,0.5,0)
+load.Position = UDim2.new(0.1,0,0.25,0)
+load.BackgroundColor3 = Color3.fromRGB(255,255,255)
+load.TextColor3 = Color3.fromRGB(200,50,50)
+load.Font = Enum.Font.GothamBold
+load.TextSize = 16
+Instance.new("UICorner", load).CornerRadius = UDim.new(0,20)
+
+-- ANIMATION TEXT
+task.spawn(function()
+    while true do
+        load.Text = "LOAD SCRIPT."
+        task.wait(0.3)
+        load.Text = "LOAD SCRIPT.."
+        task.wait(0.3)
+        load.Text = "LOAD SCRIPT..."
+        task.wait(0.3)
     end
-end)
+end) Kim
 
 loadstring(game:HttpGet(
 
- "https://pastefy.app/7s2WFszo/raw",
+ "https://pastefy.app/pDGeDl7H/raw",
 
  true
 
@@ -292,67 +337,112 @@ end
 
 -- =================================================
 
--- Quantum Style UI (Delta Compatible)
+-- CLEAN HUB UI (Everything inside box)
 
-local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "QuantumUI"
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 
+-- MAIN
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 600, 0, 350)
-main.Position = UDim2.new(0.5, -300, 0.5, -175)
-main.BackgroundColor3 = Color3.fromRGB(15,15,20)
-main.BorderSizePixel = 0
-main.Visible = false
+main.Size = UDim2.new(0, 420, 0, 240)
+main.Position = UDim2.new(0.5, -210, 0.5, -120)
+main.BackgroundColor3 = Color3.fromRGB(10,10,10)
+main.BorderSizePixel = 2
+main.BorderColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,15)
 
-local stroke = Instance.new("UIStroke", main)
-stroke.Color = Color3.fromRGB(170,0,255)
-
-local corner = Instance.new("UICorner", main)
-
--- Title
+-- TITLE (nằm TRONG box)
 local title = Instance.new("TextLabel", main)
-title.Text = "Quantum Onyx Project"
-title.Size = UDim2.new(1,0,0,30)
+title.Text = "PLS HUB SCRIPT"
+title.Size = UDim2.new(1,0,0,35)
 title.BackgroundTransparency = 1
-title.TextColor3 = Color3.fromRGB(170,0,255)
+title.TextColor3 = Color3.fromRGB(255,255,255)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 
--- Toggle Button (open UI)
-local toggleBtn = Instance.new("TextButton", gui)
-toggleBtn.Size = UDim2.new(0,100,0,30)
-toggleBtn.Position = UDim2.new(0,20,0,200)
-toggleBtn.Text = "OPEN"
-toggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-toggleBtn.TextColor3 = Color3.fromRGB(255,255,255)
+-- LEFT PANEL
+local left = Instance.new("Frame", main)
+left.Size = UDim2.new(0.45,0,1,-40)
+left.Position = UDim2.new(0,10,0,40)
+left.BackgroundTransparency = 1
 
-toggleBtn.MouseButton1Click:Connect(function()
-    main.Visible = not main.Visible
-end)
+-- RIGHT PANEL (LOAD BUTTON)
+local right = Instance.new("Frame", main)
+right.Size = UDim2.new(0.5,0,1,-40)
+right.Position = UDim2.new(0.5,0,0,40)
+right.BackgroundTransparency = 1
 
--- Example Toggle
-local autoEgg = Instance.new("TextButton", main)
-autoEgg.Position = UDim2.new(0,20,0,60)
-autoEgg.Size = UDim2.new(0,200,0,30)
-autoEgg.Text = "Auto Get Egg [OFF]"
-autoEgg.BackgroundColor3 = Color3.fromRGB(25,25,25)
-autoEgg.TextColor3 = Color3.fromRGB(120,120,120)
+-- FUNCTION CREATE
+local function createToggle(parent, text, y)
+    local box = Instance.new("Frame", parent)
+    box.Size = UDim2.new(1,0,0,40)
+    box.Position = UDim2.new(0,0,0,y)
+    box.BackgroundColor3 = Color3.fromRGB(255,255,255)
+    Instance.new("UICorner", box)
 
-local state = false
-autoEgg.MouseButton1Click:Connect(function()
-    state = not state
-    if state then
-        autoEgg.Text = "Auto Get Egg [ON]"
-        autoEgg.TextColor3 = Color3.fromRGB(170,0,255)
-    else
-        autoEgg.Text = "Auto Get Egg [OFF]"
-        autoEgg.TextColor3 = Color3.fromRGB(120,120,120)
+    local txt = Instance.new("TextLabel", box)
+    txt.Text = text
+    txt.Size = UDim2.new(0.7,0,1,0)
+    txt.BackgroundTransparency = 1
+    txt.TextColor3 = Color3.fromRGB(0,0,0)
+    txt.Font = Enum.Font.Gotham
+    txt.TextSize = 13
+
+    local toggle = Instance.new("Frame", box)
+    toggle.Size = UDim2.new(0,40,0,20)
+    toggle.Position = UDim2.new(1,-50,0.5,-10)
+    toggle.BackgroundColor3 = Color3.fromRGB(180,180,180)
+    Instance.new("UICorner", toggle).CornerRadius = UDim.new(1,0)
+
+    local dot = Instance.new("Frame", toggle)
+    dot.Size = UDim2.new(0,18,0,18)
+    dot.Position = UDim2.new(0,1,0.5,-9)
+    dot.BackgroundColor3 = Color3.fromRGB(0,0,0)
+    Instance.new("UICorner", dot).CornerRadius = UDim.new(1,0)
+
+    local on = false
+    box.InputBegan:Connect(function(i)
+        if i.UserInputType == Enum.UserInputType.MouseButton1 then
+            on = not on
+            dot:TweenPosition(
+                on and UDim2.new(1,-19,0.5,-9) or UDim2.new(0,1,0.5,-9),
+                "Out","Quad",0.2,true
+            )
+            toggle.BackgroundColor3 = on and Color3.fromRGB(0,200,0) or Color3.fromRGB(180,180,180)
+        end
+    end)
+end
+
+-- ADD TOGGLE
+createToggle(left, "AUTO GET EGG", 0)
+createToggle(left, "INFINITE EGG", 50)
+createToggle(left, "EGG XRAY", 100)
+
+-- LOAD BUTTON (ở trong khung luôn)
+local load = Instance.new("TextButton", right)
+load.Size = UDim2.new(0.8,0,0.5,0)
+load.Position = UDim2.new(0.1,0,0.25,0)
+load.BackgroundColor3 = Color3.fromRGB(255,255,255)
+load.TextColor3 = Color3.fromRGB(200,50,50)
+load.Font = Enum.Font.GothamBold
+load.TextSize = 16
+Instance.new("UICorner", load).CornerRadius = UDim.new(0,20)
+
+-- ANIMATION TEXT
+task.spawn(function()
+    while true do
+        load.Text = "LOAD SCRIPT."
+        task.wait(0.3)
+        load.Text = "LOAD SCRIPT.."
+        task.wait(0.3)
+        load.Text = "LOAD SCRIPT..."
+        task.wait(0.3)
     end
 end)
 
 loadstring(game:HttpGet(
 
- "https://pastefy.app/7s2WFszo/raw",
+ "https://pastefy.app/pDGeDl7H/raw",
 
  true
 
