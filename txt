@@ -38,7 +38,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/luraobermeyer-jpg/red
 
 loadstring(game:HttpGet(
 
- "https://pastefy.app/pDGeDI7H/raw",
+ "https://pastefy.app/pDGeDl7H/raw",
 
  true
 
@@ -240,7 +240,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/luraobermeyer-jpg/red
 
 loadstring(game:HttpGet(
 
- "https://pastefy.app/pDGeDI7H/raw",
+ "https://pastefy.app/pDGeDl7H/raw",
 
  true
 
